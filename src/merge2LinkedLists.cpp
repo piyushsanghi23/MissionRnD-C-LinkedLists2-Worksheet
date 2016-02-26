@@ -10,7 +10,6 @@ ERROR CASES: Return NULL for error cases.
 
 NOTES:
 */
-
 #include <stdio.h>
 
 struct node {
@@ -19,5 +18,35 @@ struct node {
 };
 
 struct node * merge2LinkedLists(struct node *head1, struct node *head2) {
-	return NULL;
+	//error cases
+	if (head1 == NULL)
+		return head2;
+	if (head2 == NULL)
+		return head1;
+	struct node *merge = (head1->num > head2->num) ? head2 : head1;
+	head1 = (head1->num <= head2->num) ? head2 : head1;
+	struct node *temp = merge;
+	while (merge->next != NULL && head1->next != NULL){
+		if (merge->next->num > head1->num){
+			//insert the node when small
+			head2 = head1->next;
+			head1->next = merge->next;
+			merge->next = head1;
+			merge = head1;
+			head1 = head2;
+		}
+		else
+			//iter when node is bigger
+			merge = merge->next;
+
+	}
+	while (merge->next != NULL)
+		//move to end
+		merge = merge->next;
+	if (head1 != NULL){
+		//add rest of nodes in head
+		merge->next = head1;
+
+	}
+	return temp;
 }
